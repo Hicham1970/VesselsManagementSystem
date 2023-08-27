@@ -384,9 +384,9 @@ vessel_table.column('D O D', width=200, anchor=CENTER)
 style = ttk.Style()
 style.configure('Treeview',
                 rowheight=38,
-                font=('arial', 13, 'bold'),
+                font=('arial', 12, 'bold'),
                 foreground='red4',
-                background='yellow',
+                background='cyan',
                 fieldbackground='red')
 style.configure('Treeview.heading',
                 font=('arial', 15, 'bold'),

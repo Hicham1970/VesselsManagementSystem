@@ -185,7 +185,8 @@ def connect_database():
             mycursor.execute(query)
             query='use studentmanagementsystem'
             mycursor.execute(query)
-            query='create table student(id int not null primary key, name varchar(30),mobile varchar(10),email varchar(30),' \
+            query=('create table student(id int not null primary key, name varchar(30),mobile varchar(10),'
+                   'email varchar(30),') \
                   'address varchar(100),gender varchar(20),dob varchar(20),date varchar(50), time varchar(50))'
             mycursor.execute(query)
         except:

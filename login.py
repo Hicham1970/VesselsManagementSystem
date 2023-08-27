@@ -6,7 +6,7 @@ from PIL import ImageTk
 def login():
     if usernameEntry.get() == '' or passwordEntry.get() == '':
         messagebox.showerror('Error', 'Fields cannot be empty')
-    elif usernameEntry.get() == 'Faizan' and passwordEntry.get() == '1234':
+    elif usernameEntry.get() == 'Hicham' and passwordEntry.get() == '1234':
         messagebox.showinfo('Success', 'Welcome')
         window.destroy()
         import system
@@ -29,7 +29,7 @@ bgLabel.place(x=0, y=0)
 loginFrame = Frame(window, bg='white')
 loginFrame.place(x=400, y=150)
 
-logoImage = PhotoImage(file='logo.png')
+logoImage = PhotoImage(file='sh.png')
 
 logoLabel = Label(loginFrame, image=logoImage)
 logoLabel.grid(row=0, column=0, columnspan=2, pady=10)

@@ -13,11 +13,11 @@ passwordentry = None
 
 # Logic Part
 
-def toplevel_data():
+def toplevel_data(title, button_text, command):
     global idEntry, nameEntry, flagEntry, imoEntry, cargoEntry, qtyEntry, clientEntry, doaEntry, dodEntry, screen
     screen = Toplevel()
     screen.geometry('335x490+03+185')
-    screen.title('Update Vessel')
+    screen.title(title)
     screen.resizable(False, False)
     screen.grab_set()
 
@@ -66,36 +66,37 @@ def toplevel_data():
     dodEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
     dodEntry.grid(row=8, column=1, padx=10, pady=10)
 
-    updateButton = ttk.Button(screen, text='Update', command=update_data)
-    updateButton.grid(row=9, column=1, padx=10, pady=10)
+    vesselButton = ttk.Button(screen, text=button_text, command=command)
+    vesselButton.grid(row=9, column=1, padx=10, pady=10)
+
+    if title == 'Update Vessel':
+        indexing = vessel_table.focus()
+        # print(indexing)
+        content = vessel_table.item(indexing)
+        # print(content)
+        list_data = content['values']
+
+        idEntry.insert(0, list_data[0])
+        nameEntry.insert(0, list_data[1])
+        flagEntry.insert(0, list_data[3])
+        imoEntry.insert(0, list_data[2])
+        cargoEntry.insert(0, list_data[4])
+        qtyEntry.insert(0, list_data[5])
+        clientEntry.insert(0, list_data[6])
+        doaEntry.insert(0, list_data[7])
+        dodEntry.insert(0, list_data[8])
 
 
 def update_data():
     query = 'update vessel set name=?, flag = ?, imo = ?, cargo=?, qty=?, client=?, doa=?, dod=? where vid=?'
     mycurs.execute(query, (
-    nameEntry.get(), flagEntry.get(), imoEntry.get(), cargoEntry.get(), qtyEntry.get(), clientEntry.get(),
-    doaEntry.get(), dodEntry.get(), idEntry.get()))
+        nameEntry.get(), flagEntry.get(), imoEntry.get(), cargoEntry.get(), qtyEntry.get(), clientEntry.get(),
+        doaEntry.get(), dodEntry.get(), idEntry.get()))
     con.commit()
     messagebox.showinfo('Success', f'Id{idEntry.get()} is modified successfully', parent=screen)
     screen.destroy()
     show_vessel()
 
-
-    indexing = vessel_table.focus()
-    # print(indexing)
-    content = vessel_table.item(indexing)
-    # print(content)
-    list_data = content['values']
-
-    idEntry.insert(0, list_data[0])
-    nameEntry.insert(0, list_data[1])
-    flagEntry.insert(0, list_data[3])
-    imoEntry.insert(0, list_data[2])
-    cargoEntry.insert(0, list_data[4])
-    qtyEntry.insert(0, list_data[5])
-    clientEntry.insert(0, list_data[6])
-    doaEntry.insert(0, list_data[7])
-    dodEntry.insert(0, list_data[8])
 
 
 def show_vessel():
@@ -300,16 +301,19 @@ logoImage = PhotoImage(file='sh.png')
 logoLabel = Label(leftFrame, image=logoImage)
 logoLabel.grid(row=0, column=0)
 
-addVessel = ttk.Button(leftFrame, text='Add Vessel', width=25, state=DISABLED, command=toplevel_data)
+addVessel = ttk.Button(leftFrame, text='Add Vessel', width=25, state=DISABLED,
+                       command=lambda: toplevel_data('Add Vessel', 'Add', add_data))
 addVessel.grid(row=1, column=0, pady=17)
 
-searchVessel = ttk.Button(leftFrame, text='Search Vessel', width=25, state=DISABLED, command=toplevel_data)
+searchVessel = ttk.Button(leftFrame, text='Search Vessel', width=25, state=DISABLED,
+                          command=lambda: toplevel_data('Search Vessel', 'Search', search_data))
 searchVessel.grid(row=2, column=0, pady=17)
 
 deleteVessel = ttk.Button(leftFrame, text='Delete Vessel', width=25, state=DISABLED, command=delete_vessel)
 deleteVessel.grid(row=3, column=0, pady=17)
 
-updateVessel = ttk.Button(leftFrame, text='update Vessel', width=25, state=DISABLED, command=toplevel_data)
+updateVessel = ttk.Button(leftFrame, text='Update Vessel', width=25, state=DISABLED,
+                          command=lambda: toplevel_data('Update Vessel', 'Update', update_data))
 updateVessel.grid(row=4, column=0, pady=17)
 
 showVessel = ttk.Button(leftFrame, text='Show Vessel', width=25, state=DISABLED, command=show_vessel)

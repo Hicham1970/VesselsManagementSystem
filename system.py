@@ -13,6 +13,91 @@ passwordentry = None
 
 # Logic Part
 
+def toplevel_data():
+    global idEntry, nameEntry, flagEntry, imoEntry, cargoEntry, qtyEntry, clientEntry, doaEntry, dodEntry, screen
+    screen = Toplevel()
+    screen.geometry('335x490+03+185')
+    screen.title('Update Vessel')
+    screen.resizable(False, False)
+    screen.grab_set()
+
+    idLabel = Label(screen, text='Id', font=('times new roman', 20, 'bold'))
+    idLabel.grid(row=0, column=0, padx=10, pady=8, sticky='w')
+    idEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    idEntry.grid(row=0, column=1, padx=5, pady=6)
+
+    nameLabel = Label(screen, text='Name', font=('times new roman', 20, 'bold'))
+    nameLabel.grid(row=1, column=0, padx=10, pady=8, sticky='w')
+    nameEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    nameEntry.grid(row=1, column=1, padx=5, pady=6)
+
+    flagLabel = Label(screen, text='Flag', font=('times new roman', 20, 'bold'))
+    flagLabel.grid(row=3, column=0, padx=10, pady=8, sticky='w')
+    flagEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    flagEntry.grid(row=2, column=1, padx=5, pady=6)
+
+    imoLabel = Label(screen, text='Imo', font=('times new roman', 20, 'bold'))
+    imoLabel.grid(row=2, column=0, padx=10, pady=8, sticky='w')
+    imoEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    imoEntry.grid(row=3, column=1, padx=5, pady=6)
+
+    cargoLabel = Label(screen, text='Cargo', font=('times new roman', 20, 'bold'))
+    cargoLabel.grid(row=4, column=0, padx=10, pady=8, sticky='w')
+    cargoEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    cargoEntry.grid(row=4, column=1, padx=5, pady=6)
+
+    qtyLabel = Label(screen, text='Quantity', font=('times new roman', 14, 'bold'))
+    qtyLabel.grid(row=5, column=0, padx=10, pady=8, sticky='w')
+    qtyEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    qtyEntry.grid(row=5, column=1, padx=5, pady=6)
+
+    clientLabel = Label(screen, text='Client', font=('times new roman', 14, 'bold'))
+    clientLabel.grid(row=6, column=0, padx=10, pady=8, sticky='w')
+    clientEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    clientEntry.grid(row=6, column=1, padx=5, pady=6)
+
+    doaLabel = Label(screen, text='D O A', font=('times new roman', 14, 'bold'))
+    doaLabel.grid(row=7, column=0, padx=10, pady=8, sticky='w')
+    doaEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    doaEntry.grid(row=7, column=1, padx=5, pady=6)
+
+    dodLabel = Label(screen, text='D O D', font=('times new roman', 14, 'bold'))
+    dodLabel.grid(row=8, column=0, padx=10, pady=8, sticky='w')
+    dodEntry = Entry(screen, font=('roman', 15, 'bold'), width=20)
+    dodEntry.grid(row=8, column=1, padx=10, pady=10)
+
+    updateButton = ttk.Button(screen, text='Update', command=update_data)
+    updateButton.grid(row=9, column=1, padx=10, pady=10)
+
+
+def update_data():
+    query = 'update vessel set name=?, flag = ?, imo = ?, cargo=?, qty=?, client=?, doa=?, dod=? where vid=?'
+    mycurs.execute(query, (
+    nameEntry.get(), flagEntry.get(), imoEntry.get(), cargoEntry.get(), qtyEntry.get(), clientEntry.get(),
+    doaEntry.get(), dodEntry.get(), idEntry.get()))
+    con.commit()
+    messagebox.showinfo('Success', f'Id{idEntry.get()} is modified successfully', parent=screen)
+    screen.destroy()
+    show_vessel()
+
+
+    indexing = vessel_table.focus()
+    # print(indexing)
+    content = vessel_table.item(indexing)
+    # print(content)
+    list_data = content['values']
+
+    idEntry.insert(0, list_data[0])
+    nameEntry.insert(0, list_data[1])
+    flagEntry.insert(0, list_data[3])
+    imoEntry.insert(0, list_data[2])
+    cargoEntry.insert(0, list_data[4])
+    qtyEntry.insert(0, list_data[5])
+    clientEntry.insert(0, list_data[6])
+    doaEntry.insert(0, list_data[7])
+    dodEntry.insert(0, list_data[8])
+
+
 def show_vessel():
     query = 'SELECT * FROM vessel'
     mycurs.execute(query)
@@ -20,6 +105,7 @@ def show_vessel():
     vessel_table.delete(*vessel_table.get_children())
     for data in fetched_data:
         vessel_table.insert('', END, values=data)
+
 
 def delete_vessel():
     indexing = vessel_table.focus()
@@ -38,168 +124,58 @@ def delete_vessel():
         vessel_table.insert('', END, values=data)
 
 
-def search_vessel():
-    def search_data():
-        query = "SELECT * FROM (vessel) WHERE vid = ? or name = ? or flag = ? " \
-                "or imo = ? or cargo = ? or qty = ? or client = ? or doa = ? " \
-                "or dod = ? "
-        mycurs.execute(query, (idEntry.get(), nameEntry.get(), flagEntry.get(), imoEntry.get(),
-                               cargoEntry.get(), qtyEntry.get(), clientEntry.get(),
-                               doaEntry.get(), dodEntry.get()))
-        vessel_table.delete(*vessel_table.get_children())
-        fetched_data = mycurs.fetchall()
-        for data in fetched_data:
-            # data_list = list(data)
-            vessel_table.insert('', END, values=data)
-
-    search_window = Toplevel()
-    search_window.geometry('335x490+03+185')
-    search_window.title('Search Vessel')
-    search_window.resizable(False, False)
-    search_window.grab_set()
-
-    idLabel = Label(search_window, text='Id', font=('times new roman', 20, 'bold'))
-    idLabel.grid(row=0, column=0, padx=10, pady=8, sticky='w')
-    idEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    idEntry.grid(row=0, column=1, padx=5, pady=6)
-
-    nameLabel = Label(search_window, text='Name', font=('times new roman', 20, 'bold'))
-    nameLabel.grid(row=1, column=0, padx=10, pady=8, sticky='w')
-    nameEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    nameEntry.grid(row=1, column=1, padx=5, pady=6)
-
-    flagLabel = Label(search_window, text='Flag', font=('times new roman', 20, 'bold'))
-    flagLabel.grid(row=3, column=0, padx=10, pady=8, sticky='w')
-    flagEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    flagEntry.grid(row=2, column=1, padx=5, pady=6)
-
-    imoLabel = Label(search_window, text='Imo', font=('times new roman', 20, 'bold'))
-    imoLabel.grid(row=2, column=0, padx=10, pady=8, sticky='w')
-    imoEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    imoEntry.grid(row=3, column=1, padx=5, pady=6)
-
-    cargoLabel = Label(search_window, text='Cargo', font=('times new roman', 20, 'bold'))
-    cargoLabel.grid(row=4, column=0, padx=10, pady=8, sticky='w')
-    cargoEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    cargoEntry.grid(row=4, column=1, padx=5, pady=6)
-
-    qtyLabel = Label(search_window, text='Quantity', font=('times new roman', 14, 'bold'))
-    qtyLabel.grid(row=5, column=0, padx=10, pady=8, sticky='w')
-    qtyEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    qtyEntry.grid(row=5, column=1, padx=5, pady=6)
-
-    clientLabel = Label(search_window, text='Client', font=('times new roman', 14, 'bold'))
-    clientLabel.grid(row=6, column=0, padx=10, pady=8, sticky='w')
-    clientEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    clientEntry.grid(row=6, column=1, padx=5, pady=6)
-
-    doaLabel = Label(search_window, text='D O A', font=('times new roman', 14, 'bold'))
-    doaLabel.grid(row=7, column=0, padx=10, pady=8, sticky='w')
-    doaEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    doaEntry.grid(row=7, column=1, padx=5, pady=6)
-
-    dodLabel = Label(search_window, text='D O D', font=('times new roman', 14, 'bold'))
-    dodLabel.grid(row=8, column=0, padx=10, pady=8, sticky='w')
-    dodEntry = Entry(search_window, font=('roman', 15, 'bold'), width=20)
-    dodEntry.grid(row=8, column=1, padx=10, pady=10)
-
-    searchButton = ttk.Button(search_window, text='Search Vessel', command=search_data)
-    searchButton.grid(row=9, column=1, padx=10, pady=10)
+def search_data():
+    query = "SELECT * FROM (vessel) WHERE vid = ? or name = ? or flag = ? " \
+            "or imo = ? or cargo = ? or qty = ? or client = ? or doa = ? " \
+            "or dod = ? "
+    mycurs.execute(query, (idEntry.get(), nameEntry.get(), flagEntry.get(), imoEntry.get(),
+                           cargoEntry.get(), qtyEntry.get(), clientEntry.get(),
+                           doaEntry.get(), dodEntry.get()))
+    vessel_table.delete(*vessel_table.get_children())
+    fetched_data = mycurs.fetchall()
+    for data in fetched_data:
+        # data_list = list(data)
+        vessel_table.insert('', END, values=data)
 
 
-def add_vessel():
-    def add_data():
-        if idEntry.get() == '' or nameEntry.get() == '' or flagEntry.get() == '' or imoEntry.get() == '' \
-                or cargoEntry.get() == '' or qtyEntry.get() == '' or clientEntry.get() == '' \
-                or doaEntry.get() == '' or dodEntry.get() == '':
-            messagebox.showerror('Error', 'Please fill up all the fields', parent=add_window)
+def add_data():
+    if idEntry.get() == '' or nameEntry.get() == '' or flagEntry.get() == '' or imoEntry.get() == '' \
+            or cargoEntry.get() == '' or qtyEntry.get() == '' or clientEntry.get() == '' \
+            or doaEntry.get() == '' or dodEntry.get() == '':
+        messagebox.showerror('Error', 'Please fill up all the fields', parent=screen)
+        return
+    else:
+        try:
+            query = 'INSERT INTO vessel VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
+            mycurs.execute(query,
+                           (idEntry.get(), nameEntry.get(), flagEntry.get(), imoEntry.get(), cargoEntry.get(),
+                            qtyEntry.get(), clientEntry.get(), doaEntry.get(), dodEntry.get()))
+            con.commit()
+            result = messagebox.askyesno('Question', 'Data add successfully ,\
+             Do you want to clean the form?', parent=screen)
+            if result:
+                idEntry.delete(0, END)
+                nameEntry.delete(0, END)
+                flagEntry.delete(0, END)
+                imoEntry.delete(0, END)
+                cargoEntry.delete(0, END)
+                qtyEntry.delete(0, END)
+                clientEntry.delete(0, END)
+                doaEntry.delete(0, END)
+                dodEntry.delete(0, END)
+            else:
+                pass
+        except:
+            messagebox.showerror('Error', 'Id cannot be duplicated', parent=screen)
             return
-        else:
-            try:
-                query = 'INSERT INTO vessel VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)'
-                mycurs.execute(query,
-                               (idEntry.get(), nameEntry.get(), flagEntry.get(), imoEntry.get(), cargoEntry.get(),
-                                qtyEntry.get(), clientEntry.get(), doaEntry.get(), dodEntry.get()))
-                con.commit()
-                result = messagebox.askyesno('Question', 'Data add successfully ,\
-                 Do you want to clean the form?', parent=add_window)
-                if result:
-                    idEntry.delete(0, END)
-                    nameEntry.delete(0, END)
-                    flagEntry.delete(0, END)
-                    imoEntry.delete(0, END)
-                    cargoEntry.delete(0, END)
-                    qtyEntry.delete(0, END)
-                    clientEntry.delete(0, END)
-                    doaEntry.delete(0, END)
-                    dodEntry.delete(0, END)
-                else:
-                    pass
-            except:
-                messagebox.showerror('Error', 'Id cannot be duplicated', parent=add_window)
-                return
-            # to fitch data into treeview
-            query = 'SELECT * FROM (vessel)'
-            mycurs.execute(query)
-            fetched_data = mycurs.fetchall()
-            vessel_table.delete(*vessel_table.get_children())
-            for data in fetched_data:
-                data_list = list(data)
-                vessel_table.insert('', END, values=data_list)
-
-    add_window = Toplevel()
-    add_window.geometry('335x490+03+185')
-    add_window.title('Add Vessel')
-    add_window.resizable(False, False)
-    add_window.grab_set()
-
-    idLabel = Label(add_window, text='Id', font=('times new roman', 20, 'bold'))
-    idLabel.grid(row=0, column=0, padx=10, pady=8, sticky='w')
-    idEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    idEntry.grid(row=0, column=1, padx=5, pady=6)
-
-    nameLabel = Label(add_window, text='Name', font=('times new roman', 20, 'bold'))
-    nameLabel.grid(row=1, column=0, padx=10, pady=8, sticky='w')
-    nameEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    nameEntry.grid(row=1, column=1, padx=5, pady=6)
-
-    flagLabel = Label(add_window, text='Flag', font=('times new roman', 20, 'bold'))
-    flagLabel.grid(row=2, column=0, padx=10, pady=8, sticky='w')
-    flagEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    flagEntry.grid(row=2, column=1, padx=5, pady=6)
-
-    imoLabel = Label(add_window, text='Imo', font=('times new roman', 20, 'bold'))
-    imoLabel.grid(row=3, column=0, padx=10, pady=8, sticky='w')
-    imoEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    imoEntry.grid(row=3, column=1, padx=5, pady=6)
-
-    cargoLabel = Label(add_window, text='Cargo', font=('times new roman', 20, 'bold'))
-    cargoLabel.grid(row=4, column=0, padx=10, pady=8, sticky='w')
-    cargoEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    cargoEntry.grid(row=4, column=1, padx=5, pady=6)
-
-    qtyLabel = Label(add_window, text='Quantity', font=('times new roman', 14, 'bold'))
-    qtyLabel.grid(row=5, column=0, padx=10, pady=8, sticky='w')
-    qtyEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    qtyEntry.grid(row=5, column=1, padx=5, pady=6)
-
-    clientLabel = Label(add_window, text='Client', font=('times new roman', 14, 'bold'))
-    clientLabel.grid(row=6, column=0, padx=10, pady=8, sticky='w')
-    clientEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    clientEntry.grid(row=6, column=1, padx=5, pady=6)
-
-    doaLabel = Label(add_window, text='D O A', font=('times new roman', 14, 'bold'))
-    doaLabel.grid(row=7, column=0, padx=10, pady=8, sticky='w')
-    doaEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    doaEntry.grid(row=7, column=1, padx=5, pady=6)
-
-    dodLabel = Label(add_window, text='D O D', font=('times new roman', 14, 'bold'))
-    dodLabel.grid(row=8, column=0, padx=10, pady=8, sticky='w')
-    dodEntry = Entry(add_window, font=('roman', 15, 'bold'), width=20)
-    dodEntry.grid(row=8, column=1, padx=10, pady=10)
-
-    submitButton = ttk.Button(add_window, text='Add Vessel', command=add_data)
-    submitButton.grid(row=9, column=1, padx=10, pady=10)
+        # to fitch data into treeview
+        query = 'SELECT * FROM (vessel)'
+        mycurs.execute(query)
+        fetched_data = mycurs.fetchall()
+        vessel_table.delete(*vessel_table.get_children())
+        for data in fetched_data:
+            data_list = list(data)
+            vessel_table.insert('', END, values=data_list)
 
 
 def connect_database():
@@ -324,16 +300,16 @@ logoImage = PhotoImage(file='sh.png')
 logoLabel = Label(leftFrame, image=logoImage)
 logoLabel.grid(row=0, column=0)
 
-addVessel = ttk.Button(leftFrame, text='Add Vessel', width=25, state=DISABLED, command=add_vessel)
+addVessel = ttk.Button(leftFrame, text='Add Vessel', width=25, state=DISABLED, command=toplevel_data)
 addVessel.grid(row=1, column=0, pady=17)
 
-searchVessel = ttk.Button(leftFrame, text='Search Vessel', width=25, state=DISABLED, command=search_vessel)
+searchVessel = ttk.Button(leftFrame, text='Search Vessel', width=25, state=DISABLED, command=toplevel_data)
 searchVessel.grid(row=2, column=0, pady=17)
 
 deleteVessel = ttk.Button(leftFrame, text='Delete Vessel', width=25, state=DISABLED, command=delete_vessel)
 deleteVessel.grid(row=3, column=0, pady=17)
 
-updateVessel = ttk.Button(leftFrame, text='update Vessel', width=25, state=DISABLED)
+updateVessel = ttk.Button(leftFrame, text='update Vessel', width=25, state=DISABLED, command=toplevel_data)
 updateVessel.grid(row=4, column=0, pady=17)
 
 showVessel = ttk.Button(leftFrame, text='Show Vessel', width=25, state=DISABLED, command=show_vessel)
@@ -385,8 +361,8 @@ style = ttk.Style()
 style.configure('Treeview',
                 rowheight=38,
                 font=('arial', 12, 'bold'),
-                foreground='red4',
-                background='cyan',
+                foreground='black',
+                background='white',
                 fieldbackground='red')
 style.configure('Treeview.heading',
                 font=('arial', 15, 'bold'),

@@ -4,6 +4,7 @@ import ttkthemes
 from tkinter import ttk, messagebox, filedialog
 import sqlite3
 import os
+import pandas
 
 con = None
 mycurs = None
@@ -12,6 +13,35 @@ passwordentry = None
 
 
 # Logic Part
+
+def iexit():
+    result = messagebox.askyesno('Confirm', 'Do you want to exit?')
+    if result:
+        root.destroy()
+    else:
+        pass
+
+
+
+def export_data():
+    """Logic: * indexing gives the ids of the rows
+              * on create a new empty list
+              * content gives all the row items
+              * data_list gives the values of the row
+              * new_list first empty will be fulled by the data_list
+              * with pandas dataframe we convert the list to a table easy to manage by excel"""
+    url = filedialog.asksaveasfilename(defaultextension='.csv')
+    indexing = vessel_table.get_children()
+    new_list = []
+    for index in indexing:
+        content = vessel_table.item(index)
+        data_list = content['values']
+        new_list.append(data_list)
+        #print(new_list)
+    table = pandas.DataFrame(new_list, columns=['Id', 'Name', 'Flag', 'Imo', 'Cargo', 'Qty', 'client', 'DoA', 'DoD'])
+    #print(table)
+    table.to_csv(url, index=False)
+    messagebox.showinfo('Success', 'Data was save successfully')
 
 def toplevel_data(title, button_text, command):
     global idEntry, nameEntry, flagEntry, imoEntry, cargoEntry, qtyEntry, clientEntry, doaEntry, dodEntry, screen
@@ -319,10 +349,10 @@ updateVessel.grid(row=4, column=0, pady=17)
 showVessel = ttk.Button(leftFrame, text='Show Vessel', width=25, state=DISABLED, command=show_vessel)
 showVessel.grid(row=5, column=0, pady=17)
 
-exportVessel = ttk.Button(leftFrame, text='Export Data', width=25, state=DISABLED)
+exportVessel = ttk.Button(leftFrame, text='Export Data', width=25, state=DISABLED, command=export_data)
 exportVessel.grid(row=6, column=0, pady=17)
 
-exitButton = ttk.Button(leftFrame, text='Exit', width=25)
+exitButton = ttk.Button(leftFrame, text='Exit', width=25, command=iexit)
 exitButton.grid(row=7, column=0, pady=17)
 
 # GUI Part Left Frame with the Treeview

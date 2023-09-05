@@ -38,7 +38,7 @@ def export_data():
         data_list = content['values']
         new_list.append(data_list)
         #print(new_list)
-    table = pandas.DataFrame(new_list, columns=['Id', 'Name', 'Flag', 'Imo', 'Cargo', 'Qty', 'client', 'DoA', 'DoD'])
+    table = pandas.DataFrame(new_list, columns=['Id', 'Name', 'Flag', 'Imo', 'Cargo', 'Qty', 'Client', 'DoA', 'DoD'])
     #print(table)
     table.to_csv(url, index=False)
     messagebox.showinfo('Success', 'Data was save successfully')

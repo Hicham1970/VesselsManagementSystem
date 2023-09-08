@@ -38,7 +38,7 @@ usernameLabel = Label(loginFrame, image=usernameImage, text='Username', compound
                       , font=('times new roman', 20, 'bold'), bg='white')
 usernameLabel.grid(row=1, column=0, pady=10, padx=20)
 
-usernameEntry = Entry(loginFrame, font=('times new roman', 20, 'bold'), bd=5, fg='royalblue')
+usernameEntry = Entry(loginFrame, font=('times new roman', 20, 'bold'), bd=5, fg='royal blue')
 usernameEntry.grid(row=1, column=1, pady=10, padx=20)
 
 passwordImage = PhotoImage(file='password.png')
@@ -46,11 +46,11 @@ passwordLabel = Label(loginFrame, image=passwordImage, text='Password', compound
                       , font=('times new roman', 20, 'bold'), bg='white')
 passwordLabel.grid(row=2, column=0, pady=10, padx=20)
 
-passwordEntry = Entry(loginFrame, font=('times new roman', 20, 'bold'), bd=5, fg='royalblue')
+passwordEntry = Entry(loginFrame, font=('times new roman', 20, 'bold'), bd=5, fg='royal blue')
 passwordEntry.grid(row=2, column=1, pady=10, padx=20)
 
 loginButton = Button(loginFrame, text='Login', font=('times new roman', 14, 'bold'), width=15
-                     , fg='white', bg='cornflower blue', activebackground='cornflowerblue',
+                     , fg='white', bg='cornflower blue', activebackground='cornflower blue',
                      activeforeground='white', cursor='hand2', command=login)
 loginButton.grid(row=3, column=1, pady=10)
 

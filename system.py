@@ -357,7 +357,7 @@ exitButton.grid(row=7, column=0, pady=17)
 
 # GUI Part Left Frame with the Treeview
 rightFrame = Frame(root)
-rightFrame.place(x=350, y=80, width=910, height=600)
+rightFrame.place(x=350, y=80, width=900, height=600)
 
 scrollBarX = Scrollbar(rightFrame, orient=HORIZONTAL)
 scrollBarY = Scrollbar(rightFrame, orient=VERTICAL)
@@ -397,7 +397,7 @@ style.configure('Treeview',
                 font=('arial', 12, 'bold'),
                 foreground='black',
                 background='white',
-                fieldbackground='red')
+                fieldbackground='Slate Gray1')
 style.configure('Treeview.heading',
                 font=('arial', 15, 'bold'),
                 foreground='gray64',

@@ -346,7 +346,7 @@ updateVessel = ttk.Button(leftFrame, text='Update Vessel', width=25, state=DISAB
                           command=lambda: toplevel_data('Update Vessel', 'Update', update_data))
 updateVessel.grid(row=4, column=0, pady=17)
 
-showVessel = ttk.Button(leftFrame, text='Show Vessel', width=25, state=DISABLED, command=show_vessel)
+showVessel = ttk.Button(leftFrame, text='Show Vessels', width=25, state=DISABLED, command=show_vessel)
 showVessel.grid(row=5, column=0, pady=17)
 
 exportVessel = ttk.Button(leftFrame, text='Export Data', width=25, state=DISABLED, command=export_data)
@@ -395,9 +395,11 @@ style = ttk.Style()
 style.configure('Treeview',
                 rowheight=38,
                 font=('arial', 12, 'bold'),
-                foreground='black',
+                foreground='gray44',
                 background='white',
                 fieldbackground='Slate Gray1')
+style.map("Treeview", background=[('selected', 'light blue')])
+
 style.configure('Treeview.heading',
                 font=('arial', 15, 'bold'),
                 foreground='gray64',

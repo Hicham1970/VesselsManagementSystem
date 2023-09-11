@@ -48,6 +48,7 @@ def toplevel_data(title, button_text, command):
     screen = Toplevel()
     screen.geometry('335x490+03+185')
     screen.title(title)
+    screen.iconbitmap('ico2.ico')
     screen.resizable(False, False)
     screen.grab_set()
 
@@ -303,6 +304,7 @@ root.set_theme('itft1')
 
 root.geometry('1174x680+0+0')
 root.title('Operations Management System')
+root.iconbitmap('ico.ico')
 root.state('zoomed')
 root.resizable(False, False)
 

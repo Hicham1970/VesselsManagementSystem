@@ -4,4 +4,5 @@ The application gives the possibility to collect all the information of the insp
 the mean file is system.py, and you can use it directly or by using the login page with login.py.
 Url : https://github.com/Hicham1970/VesselsManagementSystem
 
-NB: This application is not completed yet; it will be converted to an executable application .exe.
+NB: This application is not completed yet; it will be converted to an executable application .exe
+The executable version of this application is not working yet, just a question of time
